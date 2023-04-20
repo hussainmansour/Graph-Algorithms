@@ -1,30 +1,83 @@
 package org.example;
 
-/**
- * This interface represents a graph data structure and provides methods for various graph algorithms.
- */
-public interface Graph {
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
-    /**
-     * Finds the shortest path from a source node to all other nodes in the graph using Dijkstra's algorithm.
-     *
-     * @param source the source node
-     * @return an array of distances from the source node to all other nodes in the graph
-     */
-    int[] dijkstra(int source);
+public class Graph implements IGraph{
+    private double[][] graphM;
+    private int V, E;
+    private ArrayList<ArrayList<Integer>> graphL;
+    private ArrayList<Pair> edges = new ArrayList<>();
 
-    /**
-     * Finds the shortest path from a source node to all other nodes in the graph using the Bellman-Ford algorithm.
-     *
-     * @param source the source node
-     * @return an array of distances from the source node to all other nodes in the graph, or null if a negative cycle exists
-     */
-    int[] bellmanFord(int source);
+    private void setGraphM () {
+        for (int i = 0; i < V; i++) {
+            graphM[i][i] = 0;
+            for (int j = 0; j < V; j++) {
+                if (i != j) {
+                    graphM[i][j] = Double.POSITIVE_INFINITY;
+                }
+            }
+        }
+    }
 
-    /**
-     * Finds the shortest path between two nodes in the graph using the Floyd-Warshall algorithm.
-     *
-     * @return a 2D array of shortest path distances between all pairs of nodes in the graph
-     */
-    int[][] floydWarshall();
+    private void setGraphL () {
+        for (int i = 0; i < V; i++) {
+            graphL.add(new ArrayList<>());
+        }
+    }
+
+    private void readGraph (String path) {
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String line = br.readLine();
+            if (line == null) throw new IOException();
+            String[] VE = line.split(" ");
+            V = Integer.parseInt(VE[0]);
+            E = Integer.parseInt(VE[1]);
+            graphM = new double[V][V];
+            setGraphM();
+            setGraphL();
+            for (int i = 0; i < E; i++) {
+                line = br.readLine();
+                String[] edge = line.split(" ");
+                int src = Integer.parseInt(edge[0]);
+                int dist = Integer.parseInt(edge[1]);
+                double w = Double.parseDouble(edge[2]);
+                graphM[src][dist] = w;
+                graphL.get(src).add(dist);
+                edges.add(new Pair(src, dist, w));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Graph (String path) {
+        readGraph(path);
+    }
+
+    public void printGraph() {
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                System.out.print(graphM[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    @Override
+    public int[] dijkstra(int source) {
+        return new int[0];
+    }
+
+    @Override
+    public int[] bellmanFord(int source) {
+        return new int[0];
+    }
+
+    @Override
+    public int[][] floydWarshall() {
+        return new int[0][];
+    }
 }
