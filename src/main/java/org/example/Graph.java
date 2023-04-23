@@ -66,18 +66,22 @@ public class Graph implements IGraph{
         }
     }
 
-    @Override
-    public int[] dijkstra(int source) {
-        return new int[0];
+    public int size () {
+        return this.V;
     }
 
     @Override
-    public int[] bellmanFord(int source) {
-        return new int[0];
+    public double[] dijkstra(int source) {
+        return new double[0];
     }
 
     @Override
-    public int[][] floydWarshall() {
-        return new int[0][];
+    public double[] bellmanFord(int source) {
+        return new double[0];
+    }
+
+    @Override
+    public double[][] floydWarshall() {
+        return new double[0][];
     }
 }
