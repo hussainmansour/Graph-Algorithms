@@ -134,8 +134,8 @@ public class CLI {
     }
 
     private void firstMenu () {
-        System.out.println("1- SSSP");
-        System.out.println("2- APSP");
+        System.out.println("1- SSSP"); // Single Source Shortest Path
+        System.out.println("2- APSP"); // All Pairs Shortest Paths
         System.out.println("3- Check negative cycles");
         System.out.println("4- Exit");
     }

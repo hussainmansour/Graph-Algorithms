@@ -1,11 +1,10 @@
 package org.example;
 
 public class Pair {
-    int src, dist;
+    int dist;
     double weight;
 
-    Pair (int src, int dist, double weight) {
-        this.src = src;
+    Pair (int dist, double weight) {
         this.dist = dist;
         this.weight = weight;
     }

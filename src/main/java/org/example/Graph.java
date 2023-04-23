@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Graph implements IGraph{
-    private double[][] graphM;
+    private double[][] graphM; // adjacency matrix for floyd-warshall
     private int V, E;
-    private ArrayList<ArrayList<Integer>> graphL;
-    private ArrayList<Pair> edges = new ArrayList<>();
+    private ArrayList<ArrayList<Pair>> graphL; // adjacency list for dijkstra
+    private ArrayList<PairOfThree> edges = new ArrayList<>(); // edge list for bellman-ford
 
     private void setGraphM () {
         for (int i = 0; i < V; i++) {
@@ -45,8 +45,8 @@ public class Graph implements IGraph{
                 int dist = Integer.parseInt(edge[1]);
                 double w = Double.parseDouble(edge[2]);
                 graphM[src][dist] = w;
-                graphL.get(src).add(dist);
-                edges.add(new Pair(src, dist, w));
+                graphL.get(src).add(new Pair(dist, w));
+                edges.add(new PairOfThree(src, dist, w));
             }
         } catch (IOException e) {
             e.printStackTrace();
