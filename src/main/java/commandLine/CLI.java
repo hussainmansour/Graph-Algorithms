@@ -45,7 +45,7 @@ public class CLI {
         }
     }
 
-    private void SSSP() {
+    private void SSSP() { // Single Source Shortest Path
 
         int algorithm, src;
         double[] result;
@@ -90,7 +90,7 @@ public class CLI {
         return (n < graph.size() || n >= 0);
     }
 
-    private void APSP() {
+    private void APSP() { // All Pairs Shortest Path
         int algorithm;
         double[][] result;
 
