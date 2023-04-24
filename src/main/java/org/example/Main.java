@@ -1,11 +1,10 @@
 package org.example;
 
-import java.util.Scanner;
+import commandLine.CLI;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        String p = sc.nextLine();
-        Graph g = new Graph(p);
+        CLI cli = new CLI();
+        cli.start();
     }
 }

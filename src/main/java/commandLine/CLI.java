@@ -87,7 +87,7 @@ public class CLI {
     }
 
     private boolean isValidNode (int n) {
-        return (n < graph.size() || n >= 0);
+        return (n < graph.size() && n >= 0);
     }
 
     private void APSP() { // All Pairs Shortest Path
@@ -134,8 +134,8 @@ public class CLI {
     }
 
     private void firstMenu () {
-        System.out.println("1- Single source shortest path"); // Single Source Shortest Path
-        System.out.println("2- All pairs shortest path"); // All Pairs Shortest Paths
+        System.out.println("1- Single source shortest path");
+        System.out.println("2- All pairs shortest path");
         System.out.println("3- Check negative cycles");
         System.out.println("4- Exit");
     }

@@ -9,7 +9,7 @@ public class Graph implements IGraph{
     private double[][] graphM; // adjacency matrix for floyd-warshall
     private int V, E;
     private ArrayList<ArrayList<Pair>> graphL; // adjacency list for dijkstra
-    private ArrayList<PairOfThree> edges = new ArrayList<>(); // edge list for bellman-ford
+    private ArrayList<Triple> edges; // edge list for bellman-ford
 
     private void setGraphM () {
         for (int i = 0; i < V; i++) {
@@ -36,6 +36,8 @@ public class Graph implements IGraph{
             V = Integer.parseInt(VE[0]);
             E = Integer.parseInt(VE[1]);
             graphM = new double[V][V];
+            graphL = new ArrayList<>();
+            edges = new ArrayList<>();
             setGraphM();
             setGraphL();
             for (int i = 0; i < E; i++) {
@@ -46,7 +48,7 @@ public class Graph implements IGraph{
                 double w = Double.parseDouble(edge[2]);
                 graphM[src][dist] = w;
                 graphL.get(src).add(new Pair(dist, w));
-                edges.add(new PairOfThree(src, dist, w));
+                edges.add(new Triple(src, dist, w));
             }
         } catch (IOException e) {
             e.printStackTrace();
