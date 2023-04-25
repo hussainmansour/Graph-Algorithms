@@ -1,7 +1,10 @@
 package org.example;
 
+import commandLine.CLI;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        CLI cli = new CLI();
+        cli.start();
     }
 }
