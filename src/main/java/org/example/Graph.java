@@ -81,17 +81,15 @@ public class Graph implements IGraph{
         dist[source] = 0;
         pq.offer(new Pair(source, 0));
         while (!pq.isEmpty()) {
-
             Pair node = pq.poll();
             int u = node.dist;
-
             if (dist[u] < node.weight) {
                 continue;
             }
             for (Pair neighbor: graphL.get(u)) {
                 int v = neighbor.dist;
                 double w = neighbor.weight;
-                
+
                 if(dist[u]!=Double.POSITIVE_INFINITY && dist[v] > dist[u] + w){
                     dist[v] = dist[u] + w;
                     pq.offer(new Pair(v, w));
