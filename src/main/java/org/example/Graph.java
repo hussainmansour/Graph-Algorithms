@@ -3,7 +3,7 @@ package org.example;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Graph implements IGraph{
     private double[][] graphM; // adjacency matrix for floyd-warshall
@@ -74,7 +74,31 @@ public class Graph implements IGraph{
 
     @Override
     public double[] dijkstra(int source) {
-        return new double[0];
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>(V);
+        double[] dist = new double[V];
+        Arrays.fill(dist, Double.POSITIVE_INFINITY);
+        dist[source] = 0;
+        pq.offer(new Pair(source, 0));
+        while (!pq.isEmpty()) {
+
+            Pair node = pq.poll();
+            int u = node.dist;
+
+            if (dist[u] < node.weight) {
+                continue;
+            }
+            for (Pair neighbor: graphL.get(u)) {
+                int v = neighbor.dist;
+                double w = neighbor.weight;
+                
+                if(dist[u]!=Double.POSITIVE_INFINITY && dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    pq.offer(new Pair(v, w));
+                }
+            }
+        }
+        return dist;
     }
 
     @Override
