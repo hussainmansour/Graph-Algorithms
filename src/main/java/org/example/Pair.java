@@ -1,11 +1,16 @@
 package org.example;
 
-public class Pair {
+public class Pair implements Comparable<Pair>{
     int dist;
     double weight;
 
     Pair (int dist, double weight) {
         this.dist = dist;
         this.weight = weight;
+    }
+
+    @Override
+    public int compareTo(Pair o) {
+        return Integer.compare(dist, o.dist);
     }
 }
