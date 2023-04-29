@@ -12,7 +12,7 @@ public class Graph implements IGraph{
     private int V, E;
     private ArrayList<ArrayList<Pair>> graphL; // adjacency list for dijkstra
     private ArrayList<Triple> edges; // edge list for bellman-ford
-
+    public boolean neg_cycle_floyed = false;
     private void setGraphM () {
         for (int i = 0; i < V; i++) {
             graphM[i][i] = 0;
@@ -28,6 +28,10 @@ public class Graph implements IGraph{
         for (int i = 0; i < V; i++) {
             graphL.add(new ArrayList<>());
         }
+    }
+
+    public void setGraphForTEST(double[][] graph){
+        this.graphM = graph;
     }
 
     private void readGraph (String path) {
@@ -60,6 +64,10 @@ public class Graph implements IGraph{
     public Graph (String path) {
         readGraph(path);
     }
+    public Graph () {
+
+    }
+
 
     public void printGraph() {
         for (int i = 0; i < V; i++) {
@@ -149,6 +157,37 @@ public class Graph implements IGraph{
 
     @Override
     public double[][] floydWarshall() {
-        return new double[0][];
+        double[][] tempGraph = this.graphM;
+        int n = tempGraph.length;
+        for(int i = 0 ; i < n ;i++){
+            for(int j = 0; j< n;j++){
+                if(i == j ){
+                    tempGraph[i][j] = 0 ;
+                }else if(tempGraph[i][j] == 0){
+                    tempGraph[i][j] = 1e9;
+                }
+            }
+        }
+
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (tempGraph[i][k] == 1e9 || tempGraph[k][j] == 1e9)
+                        continue;
+                    tempGraph[i][j] = Math.min(tempGraph[i][j], tempGraph[i][k] + tempGraph[k][j]);
+                }
+            }
+        }
+
+        for(int i = 0; i <n ;i++){
+            for(int j = 0; j < n ;j++){
+                if(i == j && tempGraph[i][j] < 0){
+                    neg_cycle_floyed = true;
+                    return  tempGraph;
+                }
+            }
+        }
+
+        return tempGraph;
     }
 }
