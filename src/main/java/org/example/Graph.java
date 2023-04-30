@@ -84,11 +84,12 @@ public class Graph implements IGraph {
 
     @Override
     public void dijkstra(int source, double[] costs, int[] parents) {
-
+        boolean[] visited = new boolean[V];
         PriorityQueue<Pair> pq = new PriorityQueue<>(V);
         Arrays.fill(costs, Double.POSITIVE_INFINITY);
         costs[source] = 0;
         parents[source] = -1;
+        visited[source] = true;
         pq.offer(new Pair(source, 0));
         while (!pq.isEmpty()) {
             Pair node = pq.poll();
@@ -96,11 +97,11 @@ public class Graph implements IGraph {
             if (costs[u] < node.weight) {
                 continue;
             }
+            visited[u] = true;
             for (Pair neighbor : graphL.get(u)) {
                 int v = neighbor.dist;
                 double w = neighbor.weight;
-
-                if (costs[u] != Double.POSITIVE_INFINITY && costs[v] > costs[u] + w) {
+                if (costs[u] != Double.POSITIVE_INFINITY && costs[v] > costs[u] + w && !visited[v]) {
                     costs[v] = costs[u] + w;
                     parents[v] = u;
                     pq.offer(new Pair(v, w));
