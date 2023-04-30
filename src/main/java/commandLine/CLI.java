@@ -126,7 +126,8 @@ public class CLI {
     }
 
     private void negativeCycle() {
-
+        System.out.println(graph.getHasNoNegativeCycle() ?
+                "Graph has a negative cycle" : "Graph doesn't has a negative cycle");
     }
 
     public static void clearScreen () {

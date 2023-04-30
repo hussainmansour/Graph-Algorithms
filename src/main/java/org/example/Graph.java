@@ -1,19 +1,19 @@
 package org.example;
 
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class Graph implements IGraph{
+public class Graph implements IGraph {
     private double[][] graphM; // adjacency matrix for floyd-warshall
     private int V, E;
     private ArrayList<ArrayList<Pair>> graphL; // adjacency list for dijkstra
     private ArrayList<Triple> edges; // edge list for bellman-ford
-    public boolean neg_cycle_floyed = false;
-    private void setGraphM () {
+
+
+    private void setGraphM() {
         for (int i = 0; i < V; i++) {
             graphM[i][i] = 0;
             for (int j = 0; j < V; j++) {
@@ -24,17 +24,17 @@ public class Graph implements IGraph{
         }
     }
 
-    private void setGraphL () {
+    private void setGraphL() {
         for (int i = 0; i < V; i++) {
             graphL.add(new ArrayList<>());
         }
     }
 
-    public void setGraphForTEST(double[][] graph){
+    public void setGraphForTEST(double[][] graph) {
         this.graphM = graph;
     }
 
-    private void readGraph (String path) {
+    private void readGraph(String path) {
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line = br.readLine();
             if (line == null) throw new IOException();
@@ -61,11 +61,11 @@ public class Graph implements IGraph{
         }
     }
 
-    public Graph (String path) {
+    public Graph(String path) {
         readGraph(path);
     }
-    public Graph () {
 
+    public Graph() {
     }
 
 
@@ -78,44 +78,41 @@ public class Graph implements IGraph{
         }
     }
 
-    public int size () {
+    public int size() {
         return this.V;
     }
 
     @Override
-    public double[] dijkstra(int source) {
+    public void dijkstra(int source, double[] costs, int[] parents) {
 
         PriorityQueue<Pair> pq = new PriorityQueue<>(V);
-        double[] dist = new double[V];
-        Arrays.fill(dist, Double.POSITIVE_INFINITY);
-        dist[source] = 0;
+        Arrays.fill(costs, Double.POSITIVE_INFINITY);
+        costs[source] = 0;
+        parents[source] = -1;
         pq.offer(new Pair(source, 0));
         while (!pq.isEmpty()) {
             Pair node = pq.poll();
             int u = node.dist;
-            if (dist[u] < node.weight) {
+            if (costs[u] < node.weight) {
                 continue;
             }
-            for (Pair neighbor: graphL.get(u)) {
+            for (Pair neighbor : graphL.get(u)) {
                 int v = neighbor.dist;
                 double w = neighbor.weight;
 
-                if(dist[u]!=Double.POSITIVE_INFINITY && dist[v] > dist[u] + w){
-                    dist[v] = dist[u] + w;
+                if (costs[u] != Double.POSITIVE_INFINITY && costs[v] > costs[u] + w) {
+                    costs[v] = costs[u] + w;
+                    parents[v] = u;
                     pq.offer(new Pair(v, w));
                 }
             }
         }
-        return dist;
     }
 
-    @Override
-    public double[] bellmanFord(int source) {
 
-        List<Double> distance = new ArrayList<>(Collections.nCopies(V,Double.POSITIVE_INFINITY));
-        distance.set(source,0.0);
+    public boolean bellmanFord(int source, double[] costs, int[] parents) {
 
-        List<Integer> parent = new ArrayList<>(Collections.nCopies(V,-1));
+        costs[source] = 0.0;
 
         for (int i = 1; i <= V - 1; i++) {
 
@@ -126,10 +123,10 @@ public class Graph implements IGraph{
                 int v = edges.get(j).dist;
                 double weight = edges.get(j).weight;
 
-                if ( distance.get(u) != Double.POSITIVE_INFINITY &&
-                        distance.get(u) + weight < distance.get(v)){
-                    distance.set(v,distance.get(u) + weight);
-                    parent.set(v,u);
+                if (costs[u] != Double.POSITIVE_INFINITY &&
+                        costs[u] + weight < costs[v]) {
+                    costs[v] = costs[u] + weight;
+                    parents[v] = u;
                     changed = true;
                 }
             }
@@ -137,57 +134,81 @@ public class Graph implements IGraph{
             if (!changed) break;
         }
 
-        for (int j = 0; j < E; j++) {
 
+        for (int j = 0; j < E; j++) {
             int u = edges.get(j).src;
             int v = edges.get(j).dist;
             double weight = edges.get(j).weight;
 
-            if ( distance.get(u) != Double.POSITIVE_INFINITY &&
-                    distance.get(u) + weight < distance.get(v) ){
-                return null;
+            if (costs[u] != Double.POSITIVE_INFINITY &&
+                    costs[u] + weight < costs[v]) {
+                return false;
             }
         }
 
-        Double[] distanceArray = new Double[distance.size()];
-        distanceArray = distance.toArray(distanceArray);
-
-        return ArrayUtils.toPrimitive(distanceArray);
+        return true;
     }
 
-    @Override
-    public double[][] floydWarshall() {
-        double[][] tempGraph = this.graphM;
-        int n = tempGraph.length;
-        for(int i = 0 ; i < n ;i++){
-            for(int j = 0; j< n;j++){
-                if(i == j ){
-                    tempGraph[i][j] = 0 ;
-                }else if(tempGraph[i][j] == 0){
-                    tempGraph[i][j] = 1e9;
-                }
-            }
+    public List<Integer> getShortestPath(int source, int destination, int[] parents) {
+        ArrayList<Integer> shortestPath = new ArrayList<>();
+        int current = destination;
+
+        while (current != source) {
+            shortestPath.add(current);
+            current = parents[current];
         }
+
+        shortestPath.add(source);
+        Collections.reverse(shortestPath);
+        return shortestPath;
+    }
+
+
+    @Override
+    public boolean floydWarshall(double[][] costs, int[][] predecessors) {
+        int n = costs.length;
 
         for (int k = 0; k < n; k++) {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
-                    if (tempGraph[i][k] == 1e9 || tempGraph[k][j] == 1e9)
+                    if (costs[i][k] == Double.POSITIVE_INFINITY
+                            || costs[k][j] == Double.POSITIVE_INFINITY) {
                         continue;
-                    tempGraph[i][j] = Math.min(tempGraph[i][j], tempGraph[i][k] + tempGraph[k][j]);
+                    }
+                    double newCost = costs[i][k] + costs[k][j];
+                    if (newCost < costs[i][j]) {
+                        costs[i][j] = newCost;
+                        predecessors[i][j] = k;
+                    }
                 }
             }
         }
 
-        for(int i = 0; i <n ;i++){
-            for(int j = 0; j < n ;j++){
-                if(i == j && tempGraph[i][j] < 0){
-                    neg_cycle_floyed = true;
-                    return  tempGraph;
-                }
+        // Check for negative cycles
+        for (int i = 0; i < n; i++) {
+            if (costs[i][i] < 0) {
+                return false;
             }
         }
 
-        return tempGraph;
+        return true;
     }
+
+    public List<Integer> getShortestPath(int source, int destination, int[][] predecessors) {
+
+        List<Integer> path;
+        if (predecessors[source][destination] == -1) {
+            // If there is no predecessor, the path is just the edge (source, destination)
+            path = new ArrayList<>();
+            path.add(source);
+            path.add(destination);
+        } else {
+            // Recursively get the path from source to the predecessor, and from the predecessor to destination
+            path = getShortestPath(source, predecessors[source][destination], predecessors);
+            path.remove(path.size() - 1); // Remove the duplicate predecessor
+            path.addAll(getShortestPath(predecessors[source][destination], destination, predecessors));
+        }
+        return path;
+    }
+
 }
