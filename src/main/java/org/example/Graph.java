@@ -85,14 +85,17 @@ public class Graph implements IGraph {
     @Override
     public void dijkstra(int source, double[] costs, int[] parents) {
 
+        boolean[] visited = new boolean[V];
         PriorityQueue<Pair> pq = new PriorityQueue<>(V);
         Arrays.fill(costs, Double.POSITIVE_INFINITY);
         costs[source] = 0;
         parents[source] = -1;
+        visited[source] = true;
         pq.offer(new Pair(source, 0));
         while (!pq.isEmpty()) {
             Pair node = pq.poll();
             int u = node.dist;
+            visited[u] = true;
             if (costs[u] < node.weight) {
                 continue;
             }
