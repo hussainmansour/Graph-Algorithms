@@ -11,7 +11,7 @@ public interface IGraph {
      * @param source the source node
      * @return an array of distances from the source node to all other nodes in the graph
      */
-    double[] dijkstra(int source);
+    void dijkstra(int source, double[] costs, int[] parents);
 
     /**
      * Finds the shortest path from a source node to all other nodes in the graph using the Bellman-Ford algorithm.
@@ -19,12 +19,12 @@ public interface IGraph {
      * @param source the source node
      * @return an array of distances from the source node to all other nodes in the graph, or null if a negative cycle exists
      */
-    double[] bellmanFord(int source);
+    boolean bellmanFord(int source, double[] costs, int[] parents);
 
     /**
      * Finds the shortest path between two nodes in the graph using the Floyd-Warshall algorithm.
      *
      * @return a 2D array of shortest path distances between all pairs of nodes in the graph
      */
-    double[][] floydWarshall();
+    public boolean floydWarshall(double[][] costs,int[][] predecessors);
 }
