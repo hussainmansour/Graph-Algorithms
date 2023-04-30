@@ -87,8 +87,10 @@ public class Graph implements IGraph{
 
         PriorityQueue<Pair> pq = new PriorityQueue<>(V);
         double[] dist = new double[V];
+        int[] parent = new int[V];
         Arrays.fill(dist, Double.POSITIVE_INFINITY);
         dist[source] = 0;
+        parent[source] = -1;
         pq.offer(new Pair(source, 0));
         while (!pq.isEmpty()) {
             Pair node = pq.poll();
@@ -102,6 +104,7 @@ public class Graph implements IGraph{
 
                 if(dist[u]!=Double.POSITIVE_INFINITY && dist[v] > dist[u] + w){
                     dist[v] = dist[u] + w;
+                    parent[v] = u;
                     pq.offer(new Pair(v, w));
                 }
             }
