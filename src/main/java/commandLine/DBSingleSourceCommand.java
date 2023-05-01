@@ -42,16 +42,24 @@ public class DBSingleSourceCommand implements Command {
                 System.out.println("Enter a valid choice:");
             } else break;
         }
+        CLI.clearScreen();
         return c;
     }
 
     @Override
     public void execute() {
+
         if (algo == 0) {
+            long st = System.nanoTime();
             graph.dijkstra(src, costs, parents);
+            long end = System.nanoTime();
+            System.out.println("It takes: " + ((end-st)/1000) + " micro seconds");
         } else {
             Arrays.fill(costs, Double.POSITIVE_INFINITY);
+            long st = System.nanoTime();
             neg = !graph.bellmanFord(src, costs, parents);
+            long end = System.nanoTime();
+            System.out.println("It takes: " + ((end-st)/1000) + " micro seconds");
             if (neg) {
                 System.out.println("NOTE: The graph has negative cycle!!");
             }
@@ -84,6 +92,7 @@ public class DBSingleSourceCommand implements Command {
                 System.out.println("Enter a valid node:");
             } else break;
         }
+        CLI.clearScreen();
         return x;
     }
 

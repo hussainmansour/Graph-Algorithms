@@ -70,21 +70,28 @@ public class APSPCommand implements Command {
                 System.out.println("Enter a valid choice:");
             } else break;
         }
+        CLI.clearScreen();
         return x;
     }
 
     private void runDijkstra () {
         setResult();
+        long st = System.nanoTime();
         for (int i = 0; i < sz; i++) {
             graph.dijkstra(i, result[i], parents[i]);
         }
+        long end = System.nanoTime();
+        System.out.println("It takes: " + ((end-st)/1000) + " micro seconds");
     }
 
     private void runBellmanFord () {
         setResult();
+        long st = System.nanoTime();
         for (int i = 0; i < sz; i++) {
             neg = !graph.bellmanFord(i, result[i], parents[i]);
         }
+        long end = System.nanoTime();
+        System.out.println("It takes: " + ((end-st)/1000) + " micro seconds");
         if (neg) {
             System.out.println("NOTE: The graph has negative cycle!!");
         }
@@ -93,7 +100,10 @@ public class APSPCommand implements Command {
     private void runFloydWarshall () {
         setResultForFloyd();
         setPredecessors();
+        long st = System.nanoTime();
         neg = !graph.floydWarshall(result, predecessors);
+        long end = System.nanoTime();
+        System.out.println("It takes: " + ((end-st)/1000) + " micro seconds");
         if (neg) {
             System.out.println("NOTE: The graph has negative cycle!!");
         }
@@ -110,6 +120,7 @@ public class APSPCommand implements Command {
                 System.out.println("Enter a valid choice:");
             } else break;
         }
+        CLI.clearScreen();
         return x;
     }
 
@@ -121,6 +132,7 @@ public class APSPCommand implements Command {
                 System.out.println("Enter a valid node:");
             } else break;
         }
+        CLI.clearScreen();
         if (src == -1) {
             return;
         }
@@ -131,6 +143,7 @@ public class APSPCommand implements Command {
                 System.out.println("Enter a valid node:");
             } else break;
         }
+        CLI.clearScreen();
     }
 
     @Override

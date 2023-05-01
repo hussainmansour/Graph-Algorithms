@@ -34,7 +34,10 @@ public class SingleSourceFloydWarshallCommand implements Command {
 
     @Override
     public void execute() {
+        long st = System.nanoTime();
         boolean neg = graph.floydWarshall(costs, predecessors);
+        long end = System.nanoTime();
+        System.out.println("It takes: " + ((end-st)/1000) + " micro seconds");
         if (!neg) {
             System.out.println("NOTE: The graph has negative cycle!!");
         }
@@ -90,6 +93,7 @@ public class SingleSourceFloydWarshallCommand implements Command {
                 System.out.println("Enter a valid choice:");
             } else break;
         }
+        CLI.clearScreen();
         return c;
     }
 
@@ -101,6 +105,7 @@ public class SingleSourceFloydWarshallCommand implements Command {
                 System.out.println("Enter a valid node:");
             } else break;
         }
+        CLI.clearScreen();
         return x;
     }
 }

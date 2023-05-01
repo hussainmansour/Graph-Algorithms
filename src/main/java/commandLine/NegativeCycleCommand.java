@@ -54,6 +54,7 @@ public class NegativeCycleCommand implements Command {
                 System.out.println("Enter a valid choice:");
             } else break;
         }
+        CLI.clearScreen();
         return x;
     }
 
