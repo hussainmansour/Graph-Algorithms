@@ -3,18 +3,19 @@ package commandLine;
 import org.example.Graph;
 import java.util.Scanner;
 import static java.lang.System.in;
+import static java.lang.System.out;
 
 public class CLI {
     Graph graph;
     Scanner sc;
 
-    public CLI() {
+    public CLI () {
         sc = new Scanner(in);
     }
 
-    private void readPath () {
+    private void setGraph () {
+        System.out.println("Enter the path:");
         while (true) {
-            System.out.print("Enter the path: ");
             graph = new Graph(sc.nextLine());
             if (graph == null) {
                 System.out.println("Enter a valid path");
@@ -22,149 +23,53 @@ public class CLI {
         }
     }
 
+    private Command getCommand (String choice) {
+        switch (choice) {
+            case "1" -> {
+                return new SSSPCommand (this.graph);
+            }
+            case "2" -> {
+                return new APSPCommand (this.graph);
+            }
+            case "3" -> {
+                return new NegativeCycleCommand (this.graph);
+            }
+            case "4" -> {
+                return new ExitCommand ();
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
+
+    private void printCommandList () {
+        out.println("1- Single source shortest path");
+        out.println("2- All pairs shortest path");
+        out.println("3- Check negative cycle");
+        out.println("4- Exit");
+        out.println("Enter yout choice:");
+    }
+
     public void start () {
-        readPath();
-        startOperation ();
-    }
-
-    private void startOperation() {
+        setGraph ();
         while (true) {
-            firstMenu();
-            String op = sc.nextLine();
-            if ("1".equalsIgnoreCase(op)) {
-                SSSP();
-            } else if ("2".equalsIgnoreCase(op)) {
-                APSP();
-            } else if ("3".equalsIgnoreCase(op)) {
-                negativeCycle();
-            } else if ("4".equalsIgnoreCase(op)) {
-                System.exit(0);
-            } else {
-                System.out.println("Enter a valid option");
+            printCommandList();
+            Command command;
+            while (true) {
+                command = getCommand(sc.nextLine());
+                if (command == null) {
+                    out.println("Enter a valid choice:");
+                } else break;
             }
+            command.execute();
         }
-    }
-
-    private void SSSP() { // Single Source Shortest Path
-
-        int algorithm, src;
-        double[] result;
-
-        while (true) {
-            System.out.print("Choose the source node: ");
-            src = Integer.parseInt(sc.nextLine());
-            if (!isValidNode(src)) {
-                System.out.println("Enter a valid node");
-            } else break;
-        }
-
-        while (true) {
-            secondMenu(true);
-            algorithm = Integer.parseInt(sc.nextLine());
-            if (algorithm < 1 || algorithm > 3) {
-                System.out.println("Enter a valid option");
-            } else break;
-        }
-
-        switch (algorithm) {
-            case 1 -> result = graph.dijkstra(src);
-            case 2 -> result = graph.bellmanFord(src);
-            case 3 -> result = graph.floydWarshall()[src];
-            default -> result = new double[0];
-        }
-
-        while (true) {
-            System.out.print("Choose a node (-1 to back to main menu): ");
-            int dist = Integer.parseInt(sc.nextLine());
-            if (dist == -1) {
-                return;
-            } else if (!isValidNode(dist)) {
-                System.out.println("Enter a valid node");
-            } else {
-                System.out.println("The weight of the shortest path from node " + src + " to node " + dist + " = " + result[dist]);
-            }
-        }
-    }
-
-    private boolean isValidNode (int n) {
-        return (n < graph.size() && n >= 0);
-    }
-
-    private void APSP() { // All Pairs Shortest Path
-        int algorithm;
-        double[][] result;
-
-        while (true) {
-            secondMenu(true);
-            algorithm = Integer.parseInt(sc.nextLine());
-            if (algorithm < 1 || algorithm > 3) {
-                System.out.println("Enter a valid option");
-            } else break;
-        }
-
-        switch (algorithm) {
-            case 1 -> result = getAPSP(false);
-            case 2 -> result = getAPSP(true);
-            case 3 -> result = graph.floydWarshall();
-            default -> result = new double[0][];
-        }
-
-        while (true) {
-            System.out.print("Choose a pair (-1 to back to main menu): ");
-            int src, dist;
-            String[] SD = sc.nextLine().split(" ");
-            src = Integer.parseInt(SD[0]);
-            dist = Integer.parseInt(SD[1]);
-            if (dist == -1) {
-                return;
-            } else if (!isValidNode(src) || !isValidNode(dist)) {
-                System.out.println("Enter a valid node");
-            } else {
-                System.out.println("The weight of the shortest path from node " + src + " to node " + dist + " = " + result[src][dist]);
-            }
-        }
-    }
-
-    private void negativeCycle() {
-        System.out.println(graph.getHasNoNegativeCycle() ?
-                "Graph has a negative cycle" : "Graph doesn't has a negative cycle");
     }
 
     public static void clearScreen () {
-        for (int i = 0; i < 100; i++) System.out.println();
-    }
-
-    private void firstMenu () {
-        System.out.println("1- Single source shortest path");
-        System.out.println("2- All pairs shortest path");
-        System.out.println("3- Check negative cycles");
-        System.out.println("4- Exit");
-    }
-
-    private void secondMenu (boolean x) {
-        System.out.println("choose an algorithm to run:");
-        if (x) {
-            System.out.println("1- Dijkstra algorithm");
-            System.out.println("2- Bellman-Ford algorithm");
-            System.out.println("3- Floyd-Warshall algorithm");
-        } else {
-            System.out.println("1- Bellman-Ford algorithm");
-            System.out.println("2- Floyd-Warshall algorithm");
+        for (int i = 0; i < 5; i++) {
+            out.println();
         }
-    }
-
-    private double[][] getAPSP (boolean x) {
-        double[][] apsp = new double[graph.size()][graph.size()];
-        if (x) {
-            for (int i = 0; i < graph.size(); i++) {
-                apsp[i] = graph.bellmanFord(i);
-            }
-        } else {
-            for (int i = 0; i < graph.size(); i++) {
-                apsp[i] = graph.dijkstra(i);
-            }
-        }
-        return apsp;
     }
 }
 
