@@ -39,16 +39,21 @@ public class SingleSourceFloydWarshallCommand implements Command {
             System.out.println("NOTE: The graph has negative cycle!!");
         }
         while (true) {
-            System.out.println("Enter a destination node:");
+            System.out.println("Enter a destination node (or -1 to back):");
             int dest = getDest();
-            printChoices();
-            int c = getChoice();
-            if (c == 1) {
-                printCost(src, dest);
-            } else if (c == 2) {
-                printShortestPath (src, dest);
-            } else if (c == 3) {
+            if (dest == -1) {
                 return;
+            }
+            while (true) {
+                printChoices();
+                int c = getChoice();
+                if (c == 1) {
+                    printCost(src, dest);
+                } else if (c == 2) {
+                    printShortestPath(src, dest);
+                } else if (c == 3) {
+                    break;
+                }
             }
         }
     }
@@ -92,7 +97,7 @@ public class SingleSourceFloydWarshallCommand implements Command {
         int x;
         while (true) {
             x = Integer.parseInt(sc.nextLine());
-            if (x < 0 || x >= sz) {
+            if ((x < 0 || x >= sz) && x != -1) {
                 System.out.println("Enter a valid node:");
             } else break;
         }

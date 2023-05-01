@@ -12,6 +12,7 @@ public class DBSingleSourceCommand implements Command {
     double[] costs;
     int[] parents;
     Scanner sc;
+    boolean neg;
 
     public DBSingleSourceCommand (Graph graph, int src, int algo) {
         this.graph = graph;
@@ -19,8 +20,12 @@ public class DBSingleSourceCommand implements Command {
         this.sz = graph.size();
         this.costs = new double[sz];
         this.parents = new int[sz];
+        for (int i = 0; i < sz; i++) {
+            parents[i] = i;
+        }
         sc = new Scanner(System.in);
         this.algo = algo;
+        neg = false;
     }
 
     private void printChoices () {
@@ -46,22 +51,27 @@ public class DBSingleSourceCommand implements Command {
             graph.dijkstra(src, costs, parents);
         } else {
             Arrays.fill(costs, Double.POSITIVE_INFINITY);
-            boolean neg = graph.bellmanFord(src, costs, parents);
-            if (!neg) {
+            neg = !graph.bellmanFord(src, costs, parents);
+            if (neg) {
                 System.out.println("NOTE: The graph has negative cycle!!");
             }
         }
         while (true) {
-            System.out.println("Enter a destination node:");
+            System.out.println("Enter a destination node (or -1 to back):");
             int dest = getDest();
-            printChoices();
-            int c = getChoice();
-            if (c == 1) {
-                printCost(src, dest);
-            } else if (c == 2) {
-                printShortestPath (src, dest);
-            } else if (c == 3) {
+            if (dest == -1) {
                 return;
+            }
+            while (true) {
+                printChoices();
+                int c = getChoice();
+                if (c == 1) {
+                    printCost(src, dest);
+                } else if (c == 2) {
+                    printShortestPath(src, dest);
+                } else if (c == 3) {
+                    break;
+                }
             }
         }
     }
@@ -70,7 +80,7 @@ public class DBSingleSourceCommand implements Command {
         int x;
         while (true) {
             x = Integer.parseInt(sc.nextLine());
-            if (x < 0 || x >= sz) {
+            if ((x < 0 || x >= sz) && x != -1) {
                 System.out.println("Enter a valid node:");
             } else break;
         }
@@ -82,6 +92,10 @@ public class DBSingleSourceCommand implements Command {
     }
 
     private void printShortestPath (int src, int dest) {
+        if (neg) {
+            System.out.println("No optimal solution!!");
+            return;
+        }
         List<Integer> path = graph.getShortestPath(src, dest, parents);
         System.out.print("The shortest path: ");
         int s = path.size();

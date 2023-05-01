@@ -20,6 +20,9 @@ public class NegativeCycleCommand implements Command {
         sz = graph.size();
         costs = new double[sz];
         parents = new int[sz];
+        for (int i = 0; i < sz; i++) {
+            parents[i] = i;
+        }
         costsFloyd = graph.getGraphM().clone();
         predecessors = new int[sz][sz];
         Arrays.fill (costs, Double.POSITIVE_INFINITY);

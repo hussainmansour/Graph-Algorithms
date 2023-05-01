@@ -63,17 +63,6 @@ public class Graph implements IGraph {
 
     public Graph(String path) {
         readGraph(path);
-//        for (int i = 0; i < V; i++) {
-//            for (int j = 0; j < V; j++) {
-//                System.out.print(graphM[i][j] + " ");
-//            }
-//            System.out.println();
-//        }
-//        for (int i = 0; i < V; i++) {
-//            for (Pair x : graphL.get(i)) {
-//                System.out.println(i + " -> " + x.dist + " -> " + x.weight);
-//            }
-//        }
     }
 
     public Graph() {
@@ -99,7 +88,7 @@ public class Graph implements IGraph {
         PriorityQueue<Pair> pq = new PriorityQueue<>(V);
         Arrays.fill(costs, Double.POSITIVE_INFINITY);
         costs[source] = 0;
-        parents[source] = -1;
+        parents[source] = source;
         visited[source] = true;
         pq.offer(new Pair(source, 0));
         while (!pq.isEmpty()) {
