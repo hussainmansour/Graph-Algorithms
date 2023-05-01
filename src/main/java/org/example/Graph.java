@@ -115,7 +115,7 @@ public class Graph implements IGraph {
                 if (costs[u] != Double.POSITIVE_INFINITY && costs[v] > costs[u] + w && !visited[v]) {
                     costs[v] = costs[u] + w;
                     parents[v] = u;
-                    pq.offer(new Pair(v, w));
+                    pq.offer(new Pair(v, costs[v]));
                 }
             }
         }

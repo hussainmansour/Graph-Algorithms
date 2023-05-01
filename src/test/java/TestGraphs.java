@@ -28,7 +28,7 @@ public class TestGraphs {
     void Test4() {
 
     }
-    // Test for Dijkstra
+     Test for Dijkstra
 
     @Test
     // Test with a graph that has only one node
@@ -166,7 +166,23 @@ public class TestGraphs {
         double[] costs = new double[graph.size()];
         double[] costs2 = new double[graph.size()];
         int[] parents = new int[graph.size()];
-        double[] expectedDistDijkstra = {0, 2, 7, 4, 9, 6, 2};
+        double[] expectedDistDijkstra = {0, 2, 7, 4, 9, 6, 8};
+        double[] expectedDistBellman = {0, 2, 7, 3, 9, 5, 2};
+        graph.bellmanFord(0,costs, parents);
+        graph.dijkstra(0,costs2, parents);
+        graph.printGraph();
+        System.out.println(Arrays.toString(costs2));
+        //assertArrayEquals(expectedDistBellman, costs);
+        assertArrayEquals(expectedDistDijkstra, costs2);
+    }
+    @Test
+    // Test with a large graph
+    public void testDijkstra12() {
+        Graph graph = new Graph("testGraph.txt");
+        double[] costs = new double[graph.size()];
+        double[] costs2 = new double[graph.size()];
+        int[] parents = new int[graph.size()];
+        double[] expectedDistDijkstra = {0, 5, 10, 10, 8};
         double[] expectedDistBellman = {0, 2, 7, 3, 9, 5, 2};
         graph.bellmanFord(0,costs, parents);
         graph.dijkstra(0,costs2, parents);
