@@ -67,9 +67,9 @@ public class CLI {
         }
 
         switch (algorithm) {
-            case 1 -> result = graph.dijkstra(src);
-            case 2 -> result = graph.bellmanFord(src);
-            case 3 -> result = graph.floydWarshall()[src];
+            //case 1 -> result = graph.dijkstra(src);
+            //case 2 -> result = graph.bellmanFord(src);
+            //case 3 -> result = graph.floydWarshall()[src];
             default -> result = new double[0];
         }
 
@@ -105,7 +105,7 @@ public class CLI {
         switch (algorithm) {
             case 1 -> result = getAPSP(false);
             case 2 -> result = getAPSP(true);
-            case 3 -> result = graph.floydWarshall();
+           // case 3 -> result = graph.floydWarshall();
             default -> result = new double[0][];
         }
 
@@ -126,8 +126,8 @@ public class CLI {
     }
 
     private void negativeCycle() {
-        System.out.println(graph.getHasNoNegativeCycle() ?
-                "Graph has a negative cycle" : "Graph doesn't has a negative cycle");
+        //System.out.println(graph.getHasNoNegativeCycle() ?
+                //"Graph has a negative cycle" : "Graph doesn't has a negative cycle");
     }
 
     public static void clearScreen () {
@@ -157,11 +157,11 @@ public class CLI {
         double[][] apsp = new double[graph.size()][graph.size()];
         if (x) {
             for (int i = 0; i < graph.size(); i++) {
-                apsp[i] = graph.bellmanFord(i);
+                //apsp[i] = graph.bellmanFord(i);
             }
         } else {
             for (int i = 0; i < graph.size(); i++) {
-                apsp[i] = graph.dijkstra(i);
+                //apsp[i] = graph.dijkstra(i);
             }
         }
         return apsp;
