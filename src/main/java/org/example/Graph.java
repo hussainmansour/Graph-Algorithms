@@ -57,12 +57,23 @@ public class Graph implements IGraph {
                 edges.add(new Triple(src, dist, w));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Not valid path!");
         }
     }
 
     public Graph(String path) {
         readGraph(path);
+//        for (int i = 0; i < V; i++) {
+//            for (int j = 0; j < V; j++) {
+//                System.out.print(graphM[i][j] + " ");
+//            }
+//            System.out.println();
+//        }
+//        for (int i = 0; i < V; i++) {
+//            for (Pair x : graphL.get(i)) {
+//                System.out.println(i + " -> " + x.dist + " -> " + x.weight);
+//            }
+//        }
     }
 
     public Graph() {
@@ -164,6 +175,9 @@ public class Graph implements IGraph {
         return shortestPath;
     }
 
+    public double[][] getGraphM() {
+        return graphM;
+    }
 
     @Override
     public boolean floydWarshall(double[][] costs, int[][] predecessors) {
@@ -179,7 +193,7 @@ public class Graph implements IGraph {
                     double newCost = costs[i][k] + costs[k][j];
                     if (newCost < costs[i][j]) {
                         costs[i][j] = newCost;
-                        predecessors[i][j] = k;
+                        predecessors[i][j] = predecessors[i][k];
                     }
                 }
             }
@@ -197,19 +211,26 @@ public class Graph implements IGraph {
 
     public List<Integer> getShortestPath(int source, int destination, int[][] predecessors) {
 
-        List<Integer> path;
         if (predecessors[source][destination] == -1) {
-            // If there is no predecessor, the path is just the edge (source, destination)
-            path = new ArrayList<>();
-            path.add(source);
-            path.add(destination);
-        } else {
-            // Recursively get the path from source to the predecessor, and from the predecessor to destination
-            path = getShortestPath(source, predecessors[source][destination], predecessors);
-            path.remove(path.size() - 1); // Remove the duplicate predecessor
-            path.addAll(getShortestPath(predecessors[source][destination], destination, predecessors));
+            return new ArrayList<>();
         }
+
+        // Build the path iteratively by following the predecessor links
+        List<Integer> path = new ArrayList<>();
+        path.add(source);
+        while (source != destination) {
+            source = predecessors[source][destination];
+            path.add (source);
+        }
+
         return path;
     }
+
+
+
+
+
+
+
 
 }
