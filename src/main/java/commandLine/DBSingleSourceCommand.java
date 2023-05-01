@@ -46,7 +46,10 @@ public class DBSingleSourceCommand implements Command {
             graph.dijkstra(src, costs, parents);
         } else {
             Arrays.fill(costs, Double.POSITIVE_INFINITY);
-            graph.bellmanFord(src, costs, parents);
+            boolean neg = graph.bellmanFord(src, costs, parents);
+            if (!neg) {
+                System.out.println("NOTE: The graph has negative cycle!!");
+            }
         }
         while (true) {
             System.out.println("Enter a destination node:");

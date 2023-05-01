@@ -35,6 +35,9 @@ public class SingleSourceFloydWarshallCommand implements Command {
     @Override
     public void execute() {
         boolean neg = graph.floydWarshall(costs, predecessors);
+        if (!neg) {
+            System.out.println("NOTE: The graph has negative cycle!!");
+        }
         while (true) {
             System.out.println("Enter a destination node:");
             int dest = getDest();
