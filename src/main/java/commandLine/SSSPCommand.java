@@ -1,8 +1,6 @@
 package commandLine;
 
 import org.example.Graph;
-
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Scanner;
 
 public class SSSPCommand implements Command{
@@ -19,13 +17,14 @@ public class SSSPCommand implements Command{
 
     private int getSrc () {
         int x;
-        System.out.println("Choose the source node:");
+        System.out.println("Choose the source node (or -1 to back):");
         while (true) {
             x = Integer.parseInt(sc.nextLine());
-            if (x >= sz || x < 0) {
+            if ((x >= sz || x < 0) && x != -1) {
                 System.out.println("Enter a valid node:");
             } else break;
         }
+        CLI.clearScreen();
         return x;
     }
 
@@ -58,6 +57,9 @@ public class SSSPCommand implements Command{
     public void execute () {
         while (true) {
             this.src = getSrc();
+            if (src == -1) {
+                break;
+            }
             Command command;
             printAlgorithmsList();
             while (true) {

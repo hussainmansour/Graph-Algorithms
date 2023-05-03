@@ -21,6 +21,7 @@ public class CLI {
                 System.out.println("Enter a valid path");
             } else break;
         }
+        clearScreen();
     }
 
     private Command getCommand (String choice) {
@@ -62,14 +63,15 @@ public class CLI {
                     out.println("Enter a valid choice:");
                 } else break;
             }
+            clearScreen();
             command.execute();
         }
     }
 
     public static void clearScreen () {
-        for (int i = 0; i < 5; i++) {
+        // for (int i = 0; i < 1; i++) {
             out.println();
-        }
+        // }
     }
 }
 
