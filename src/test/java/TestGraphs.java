@@ -335,4 +335,43 @@ public class TestGraphs {
         assertTrue(graph.getHasNoNegativeCycle());
     }
 
+
+    @Test
+    void TestFloyd5() {
+        Graph graph = new Graph();
+        double[][] g = {
+                {0, 4, 0, 0, -2},
+                {0, 0, -1, 4, 2},
+                {0, 0, 0, 0,0},
+                {0, 0, -6, 0, 1},
+                {0, 0, 0, 0, 0}
+        };
+        graph.setGraphForTEST(g);
+        double[][] costs = new double[g.length][g.length];
+        int[][] predecessors = new int[g.length][g.length];
+
+        graph.setHasNoNegativeCycle(graph.floydWarshall(costs, predecessors));
+        assertTrue(graph.getHasNoNegativeCycle());
+    }
+
+
+    @Test
+    void TestFloyd6() {
+        Graph graph = new Graph();
+        double[][] g = {
+                {0, 2, 0, -1, 0, 0},
+                {0, 0, 3, 2, 0, 0},
+                {0, 0, 0, 0, 1, 0},
+                {-4, 0, 0, 0, 4, 0},
+                {0, 0, 0, 0, 0, 1},
+                {0, 0, 0, 0, 0, 0}
+        };
+        graph.setGraphForTEST(g);
+        double[][] costs = new double[g.length][g.length];
+        int[][] predecessors = new int[g.length][g.length];
+
+        graph.setHasNoNegativeCycle(graph.floydWarshall(costs, predecessors));
+        assertFalse(graph.getHasNoNegativeCycle());
+    }
+
 }
