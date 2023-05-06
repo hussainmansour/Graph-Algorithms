@@ -11,6 +11,7 @@ public class Graph implements IGraph {
     private int V, E;
     private ArrayList<ArrayList<Pair>> graphL; // adjacency list for dijkstra
     private ArrayList<Triple> edges; // edge list for bellman-ford
+    private boolean hasNoNegativeCycle;
 
 
     private void setGraphM() {
@@ -65,9 +66,7 @@ public class Graph implements IGraph {
         readGraph(path);
     }
 
-    public Graph() {
-    }
-
+    public Graph() {}
 
     public void printGraph() {
         for (int i = 0; i < V; i++) {
@@ -94,6 +93,7 @@ public class Graph implements IGraph {
         while (!pq.isEmpty()) {
             Pair node = pq.poll();
             int u = node.dist;
+
             if (costs[u] < node.weight) {
                 continue;
             }
@@ -113,7 +113,10 @@ public class Graph implements IGraph {
 
     public boolean bellmanFord(int source, double[] costs, int[] parents) {
 
-        costs[source] = 0.0;
+        Arrays.fill(costs,Double.POSITIVE_INFINITY);
+        Arrays.fill(parents,-1);
+        costs[source] = 0;
+
 
         for (int i = 1; i <= V - 1; i++) {
 
@@ -151,6 +154,8 @@ public class Graph implements IGraph {
     }
 
     public List<Integer> getShortestPath(int source, int destination, int[] parents) {
+        if (!hasNoNegativeCycle) return null;
+
         ArrayList<Integer> shortestPath = new ArrayList<>();
         int current = destination;
 
@@ -216,10 +221,12 @@ public class Graph implements IGraph {
     }
 
 
+    public boolean getHasNoNegativeCycle() {
+        return hasNoNegativeCycle;
+    }
 
-
-
-
-
+    public void setHasNoNegativeCycle(boolean hasNoNegativeCycle) {
+        this.hasNoNegativeCycle = hasNoNegativeCycle;
+    }
 
 }
