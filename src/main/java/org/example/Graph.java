@@ -176,6 +176,19 @@ public class Graph implements IGraph {
     @Override
     public boolean floydWarshall(double[][] costs, int[][] predecessors) {
         int n = costs.length;
+        for(int i = 0; i < n ;i++){
+            for(int j = 0; j<n ;j++){
+
+                if(  i != j ){
+                        if(graphM[i][j] != 0)
+                            costs[i][j] = graphM[i][j];
+                        else {
+                            costs[i][j] = Double.POSITIVE_INFINITY;
+                        }
+                }
+                System.out.println(costs[i][j]);
+            }
+        }
 
         for (int k = 0; k < n; k++) {
             for (int i = 0; i < n; i++) {
@@ -197,6 +210,13 @@ public class Graph implements IGraph {
         for (int i = 0; i < n; i++) {
             if (costs[i][i] < 0) {
                 return false;
+            }
+        }
+
+        for(int i = 0; i < n ;i++){
+            for(int j = 0; j<n ;j++){
+
+                System.out.println(costs[i][j]);
             }
         }
 
