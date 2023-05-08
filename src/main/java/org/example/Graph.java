@@ -170,7 +170,13 @@ public class Graph implements IGraph {
     }
 
     public double[][] getGraphM() {
-        return graphM;
+        double[][] cpy = new double[V][V];
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                cpy[i][j] = graphM[i][j];
+            }
+        }
+        return cpy;
     }
 
     @Override
@@ -186,7 +192,6 @@ public class Graph implements IGraph {
                             costs[i][j] = Double.POSITIVE_INFINITY;
                         }
                 }
-                System.out.println(costs[i][j]);
             }
         }
 
@@ -210,13 +215,6 @@ public class Graph implements IGraph {
         for (int i = 0; i < n; i++) {
             if (costs[i][i] < 0) {
                 return false;
-            }
-        }
-
-        for(int i = 0; i < n ;i++){
-            for(int j = 0; j<n ;j++){
-
-                System.out.println(costs[i][j]);
             }
         }
 

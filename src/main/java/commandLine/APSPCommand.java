@@ -188,6 +188,9 @@ public class APSPCommand implements Command {
         List<Integer> path;
         if (algo) {
             path = graph.getShortestPath(src, dest, predecessors);
+            if (path.isEmpty()) {
+                System.out.println("No path");
+            }
         } else {
             if (neg) {
                 System.out.println("No optimal solution!!");
